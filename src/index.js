@@ -1,3 +1,7 @@
+import { default as VueCurtains } from "./vue-curtains/plugins/vue-curtains-plugin";
+
+export default VueCurtains;
+
 export { default as Curtains } from "./vue-curtains/components/Curtains/index.vue";
 export { default as Plane } from "./vue-curtains/components/Plane/index.vue";
 

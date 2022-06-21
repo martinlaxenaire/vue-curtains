@@ -4,7 +4,6 @@ export default {
   install: (
     app,
     options = {
-      container: null,
       alpha: true,
       antialias: true,
       permultipliedAlpha: false,
