@@ -6,64 +6,102 @@ The `<RenderTarget />` component will create a WebGL RenderTarget (or Frame Buff
 
 #### Usage
 
-```jsx
-import ReactDOM from 'react-dom';
-import React from 'react';
-import {RenderTarget} from 'react-curtains';
+```javascript
+import { RenderTarget } from "vue-curtains";
 
-function BasicRenderTarget({children}) {
-    return (
-        <RenderTarget>
-            {children}
-        </RenderTarget>
-    );
+export default {
+  name: "BasicRenderTarget",
+  components: {
+    RenderTarget
+  }
 }
+</script>
+
+<template>
+  <RenderTarget>
+    <slot />
+  </RenderTarget>
+</template>
 ```
 
 #### Properties
 
 ##### Regular parameters & properties
 
-You can pass any of the <a href="https://www.curtainsjs.com/render-target-class.html#parameters">RenderTarget class parameters</a> as a React prop to your component.
+You can pass the <a href="https://www.curtainsjs.com/render-target-class.html#parameters">RenderTarget class parameters</a>  as a `:params` prop to your component.
 
-```jsx
-<RenderTarget
-    depth={false}
-    clear={false}
->
-    {children}
-</RenderTarget>
+```javascript
+import { RenderTarget } from "vue-curtains";
+
+export default {
+  name: "BasicRenderTarget",
+  components: {
+    RenderTarget
+  },
+  setup() {
+    const params = {
+      depth: false,
+      clear: false
+    };
+    
+    return {
+      params
+    }
+  }
+}
+</script>
+
+<template>
+  <RenderTarget :params="params">
+    <slot />
+  </RenderTarget>
+</template>
 ```
 
 ##### uniqueKey property
 
 Sometimes you'll want to apply your render target to multiple planes (usually combined with a [ShaderPass](shader-pass.md)), and it may be easier to add your render target inside a loop. You can pass an additional `uniqueKey` prop to your `<RenderTarget />` component and it will be created just once:
 
-```jsx
-import ReactDOM from 'react-dom';
-import React from 'react';
-import {RenderTarget, ShaderPass} from 'react-curtains';
-import BasicPlane from './components/BasicPlane'; // a basic plane component
+```javascript
+import { RenderTarget, ShaderPass } from "vue-curtains";
+import BasicPlane from './components/BasicPlane.vue'; // a basic plane component
+import { fragmentShader } from "./shader-pass"; // shader pass shader
 
-function SelectivePlanesPass({planeElements}) {
-    return (
-        <div>
-            {planeElements.map((planeEl) => {
-                <RenderTarget
-                    uniqueKey="planesRenderTarget"
-                >
-                    <ShaderPass
-                        uniqueKey="planesPass"
-                    >
-                        <BasicPlane
-                            element={planeEl}
-                        />
-                    </ShaderPass
-                </RenderTarget>
-            })}
-        </div>
-    );
+export default {
+  name: "SelectivePlanesPass",
+  components: {
+    RenderTarget,
+    ShaderPass,
+    BasicPlane
+  },
+  setup() {    
+    const passParams = {
+      fragmentShader,
+      uniforms: {
+        time: {
+          name: "uTime",
+          value: 0,
+          type: "1f"
+        }
+      }
+    }
+    
+    return {
+      passParams
+    }
+  }
 }
+</script>
+
+<template>
+  <div v-for="index in 5">
+    <RenderTarget uniqueKey="planesRenderTarget">
+      <ShaderPass :params="passParams">
+        <BasicPlane />
+      </ShaderPass>
+    </RenderTarget>
+  </div>
+</template>
 ```
 
 ##### autoDetectChildren property
@@ -72,39 +110,64 @@ By default, the `<RenderTarget />` component will loop through all its children 
 
 If you want to prevent this behaviour and handle this by yourself, just set its `autoDetectChildren` prop to false:
 
-```jsx
-<RenderTarget
-    autoDetectChildren={false}
->
-    {children}
-</RenderTarget>
+```javascript
+import { RenderTarget } from "vue-curtains";
+
+export default {
+  name: "BasicRenderTarget",
+  components: {
+    RenderTarget
+  },
+  setup() {
+    const params = {
+      autoDetectChildren: false
+    };
+
+    return {
+      params
+    }
+  }
+}
+</script>
+
+<template>
+  <RenderTarget :params="params">
+    <slot />
+  </RenderTarget>
+</template>
 ```
 
 #### Event
 
-The `<RenderTarget />` component provides an additional `onReady` event fired once the render target has been created: 
+The `<RenderTarget />` component provides an additional `@ready` event fired once the render target has been created: 
 
-```jsx
-import ReactDOM from 'react-dom';
-import React from 'react';
-import {RenderTarget} from 'react-curtains';
+```javascript
+import { RenderTarget } from "vue-curtains";
 
-function BasicRenderTarget({children}) {
-
+export default {
+  name: "BasicRenderTarget",
+  components: {
+    RenderTarget
+  },
+  setup() {
     const onRenderTargetReady = (renderTarget) => {
-        console.log("render target is ready!", renderTarget);
-        // you have access to the render target method here
-        const renderTexture = renderTarget.getTexture();
+      console.log("render target is ready!", renderTarget);
+      // you have access to the render target method here
+      const renderTexture = renderTarget.getTexture();
     };
 
-    return (
-        <RenderTarget
-            onReady={onRenderTargetReady}
-        >
-            {children}
-        </RenderTarget>
-    );
+    return {
+      onRenderTargetReady
+    }
+  }
 }
+</script>
+
+<template>
+  <RenderTarget @ready="onRenderTargetReady">
+    <slot />
+  </RenderTarget>
+</template>
 ```
 
 #### Unmounting

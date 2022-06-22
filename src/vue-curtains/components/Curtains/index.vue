@@ -5,47 +5,9 @@
 
 <script>
 import { Curtains } from "curtainsjs";
-import { flattenDefaultParams } from "../../utils";
+import { curtainsEvents, flattenDefaultParams } from "../../utils";
 import { params } from "./params.js";
-import { ref, provide, inject, toRaw, onMounted, onBeforeUnmount } from "vue";
-
-const curtainsEvents = {
-  subscriptions: {
-    onAfterResize: [],
-    onContextLost: [],
-    onContextRestored: [],
-    onError: [],
-    onSuccess: [],
-    onRender: [],
-    onScroll: [],
-  },
-
-  isValidEvent(event) {
-    return !!Object.keys(this.subscriptions).find((e) => event === e);
-  },
-
-  addSubscription(subscription) {
-    if (!this.isValidEvent(subscription.event)) return;
-
-    // is it already in our subscription event array?
-    const existingSubscription = this.subscriptions[subscription.event].find(
-      (el) => el.id === subscription.id
-    );
-    // if not we'll add it
-    if (!existingSubscription) {
-      this.subscriptions[subscription.event].push(subscription);
-    }
-  },
-
-  removeSubscription(subscription) {
-    if (!this.isValidEvent(subscription.event)) return;
-
-    // remove from our subscription event array
-    this.subscriptions[subscription.event] = this.subscriptions[
-      subscription.event
-    ].filter((el) => el.id !== subscription.id);
-  },
-};
+import { ref, provide, onMounted, onBeforeUnmount } from "vue";
 
 export default {
   name: "Curtains",
@@ -55,32 +17,41 @@ export default {
       default: params,
     },
   },
-  setup(props) {
+  emits: [
+    "error",
+    "success",
+    "context-lost",
+    "context-restored",
+    "after-resize",
+    "render",
+    "scroll",
+  ],
+  setup(props, { emit }) {
     const container = ref(null);
     provide("curtainsEvents", curtainsEvents);
 
-    const curtains = ref(null);
+    const params = flattenDefaultParams(props.params);
+    // instanciate curtains right away
+    const curtains = new Curtains(params);
     provide("curtains", curtains);
 
-    const params = flattenDefaultParams(props.params);
-
     onMounted(() => {
-      params.container = container.value;
-
-      curtains.value = new Curtains(params);
+      // set its container
+      curtains.setContainer(container.value);
 
       // loop through our subscriptions and bind them to curtains events
       Object.keys(curtainsEvents.subscriptions).forEach((subscription) => {
-        curtains.value[subscription](() => {
+        curtains[subscription](() => {
+          emit(curtainsEvents.kebabCase[subscription], curtains);
           curtainsEvents.subscriptions[subscription].forEach((element) => {
-            element.callback && element.callback(toRaw(curtains.value));
+            element.callback && element.callback(curtains);
           });
         });
       });
     });
 
     onBeforeUnmount(() => {
-      curtains.value.dispose();
+      curtains.dispose();
     });
 
     return {

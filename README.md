@@ -32,7 +32,7 @@ vue-curtains introduces a bunch of components based on curtains.js classes:
 
 The library relies on the Vue 3 Composition API.
 
-Inside your `<Curtains />` component, you'll have access to a couple useful custom hooks:
+Inside your `<Curtains></Curtains>` component, you'll have access to a couple useful custom hooks:
 
 
 ##### useCurtains
@@ -41,7 +41,7 @@ Inside your `<Curtains />` component, you'll have access to a couple useful cust
 const curtains = useCurtains();
 ```
 
-This hook returns the curtains instance injected by the `<Curtains />` component, or `null` if the instance is undefined (for example if you try to use it outside your `<Curtains />` component).
+This hook returns the curtains instance injected by the `<Curtains></Curtains>` component, or `null` if the instance is undefined (for example if you try to use it outside your `<Curtains></Curtains>` component).
 
 ```javascript
 import { useCurtains } from "vue-curtains";
@@ -62,7 +62,7 @@ export default {
 useCurtainsEvent(event, callback);
 ```
 
-This hook lets you subscribe to any of your <a href="https://www.curtainsjs.com/curtains-class.html#events">curtains instance events</a>, so you can use those events from any `<Curtains />` child component in your app.
+This hook lets you subscribe to any of your <a href="https://www.curtainsjs.com/curtains-class.html#events">curtains instance events</a>, so you can use those events from any `<Curtains></Curtains>` child component in your app.
 
 ```javascript
 import { useCurtainsEvent } from "vue-curtains";

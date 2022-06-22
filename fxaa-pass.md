@@ -6,23 +6,28 @@ The `<FXAAPass />` component will create a WebGL FXAAPass (using a ShaderPass ob
 
 #### Usage
 
-```jsx
-import ReactDOM from 'react-dom';
-import React from 'react';
-import {FXAAPass} from 'react-curtains';
+```javascript
+import { FXAAPass } from "vue-curtains";
 
-function BasicFXAAPass() {
-    return (
-        <FXAAPass />
-    );
+export default {
+  name: "BasicFXAAPass",
+  components: {
+    FXAAPass
+  }
 }
+</script>
+
+<template>
+  <FXAAPass />
+</template>
 ```
+
 
 #### Properties & Events
 
 You can refer to both the <a href="https://www.curtainsjs.com/fxaa-pass-class.html">FXAAPass curtains.js class</a> and [ShaderPass component](shader-pass.md) documentations.
 
-Most of the time tho, you'll just add the `<FXAAPass />` component without any props and let it automatically add anti-aliasing to your scene. 
+Most of the time tho, you'll just add the `<FXAAPass />` component without any params and let it automatically add anti-aliasing to your scene. 
 
 #### Unmounting
 

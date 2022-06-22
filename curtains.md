@@ -8,65 +8,126 @@ For all those reasons, you should always wrap your application, including routin
 
 #### Usage
 
-```jsx
-import ReactDOM from 'react-dom';
-import React from 'react';
-import {Curtains} from 'react-curtains';
-import App from 'App';
+```javascript
+import { createApp } from "vue";
+import { Curtains } from "vue-curtains";
 
-ReactDOM.render(
+createApp({
+  components: {
+    Curtains
+  },
+  template: `
     <Curtains>
-        <App />
-    </Curtains>,
-    document.getElementById('root')
-);
+      <!-- example with vue-router -->
+      <RouterView />
+    </Curtains>`
+}).mount('#app');
 ```
 
 #### Properties
 
-Except for the container, which will be set internally, you can pass any of the <a href="https://www.curtainsjs.com/curtains-class.html#curtains-init-params">Curtains class parameters</a> as a React prop to your component.
+Except for the container, which will be set internally, you can pass the <a href="https://www.curtainsjs.com/curtains-class.html#curtains-init-params">Curtains class parameters</a> as a `:params` prop to your component.
 Also note that the `production` property is set to `false` on development and `true` on production environments by default.
 
-You can also use React props and events like `className` or `onClick`. They can be used to style your canvas container and listen to events:
+You can also use Vue `attrs` and events like `id` or `@click`. They can be used to style your canvas container and listen to events:
 
-```jsx
-<Curtains
-    className="canvas"
-    pixelRatio={Math.min(1.5, window.devicePixelRatio)}
-    antialias={false}
->
-    <App />
-</Curtains>
+```javascript
+import { Curtains } from "vue-curtains";
+
+export default {
+  name: "App",
+  components: {
+    Curtains
+  },
+  setup() {
+    const curtainsParams = {
+      pixelRatio: Math.min(1.5, window.devicePixelRatio),
+      antialias: false
+    };
+
+    return {
+      curtainsParams
+    };
+  };
+</script>
+
+<template>
+  <Curtains id="CurtainsCanvas" :params="curtainsParams">
+    <!-- example with vue-router -->
+    <RouterView />
+  </Curtains>
+</template>
+
+<style scoped>
+#CurtainsCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+</style>
 ```
 
 #### Events
 
-You can also pass as props a function to execute for each corresponding <a href="https://www.curtainsjs.com/curtains-class.html#events">Curtains class events</a>. You'll have access to your `curtains` instance inside all of them.
+You can also pass as events a function to execute for each corresponding <a href="https://www.curtainsjs.com/curtains-class.html#events">Curtains class events</a>. You'll have access to your `curtains` instance inside all of them.
 
-```jsx
-function MainCurtains() {
+> :warning: The components events respect Vue kebab case standard. For example, use `@context-lost` instead of `@onContextLost`
 
-    const onCurtainsError = (curtains) => {
-        console.log("on error!", curtains);
+```javascript
+import { Curtains } from "vue-curtains";
+
+export default {
+  name: "App",
+  components: {
+    Curtains
+  },
+  setup() {
+    const curtainsParams = {
+      pixelRatio: Math.min(1.5, window.devicePixelRatio),
+      antialias: false
     };
-    
-    const onCurtainsRender = (curtains) => {
-        console.log("on render!", curtains);
+
+    const onError = (curtains) => {
+      console.log("on error!", curtains);
     };
-    
-    return (
-        <Curtains
-            className="canvas"
-            pixelRatio={Math.min(1.5, window.devicePixelRatio)}
-            antialias={false}
-            
-            onRender={onCurtainsError}
-            onRender={onCurtainsRender}
-        >
-            <App />
-        </Curtains>
-    );
+
+    const onRender = (curtains) => {
+      console.log("on render!", curtains);
+    };
+
+    return {
+      curtainsParams,
+      onError,
+      onRender
+    };
+  };
+</script>
+
+<template>
+  <Curtains
+    id="CurtainsCanvas"
+    :params="curtainsParams"
+    @error="onError"
+    @render="onRender"
+  >
+    <!-- example with vue-router -->
+    <RouterView />
+  </Curtains>
+</template>
+
+<style scoped>
+#CurtainsCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
 }
+</style>
 ```
 
 #### Unmounting

@@ -6,23 +6,27 @@ The `<PingPongPlane />` component will create a WebGL PingPongPlane (using a Pla
 
 #### Usage
 
-```jsx
-import ReactDOM from 'react-dom';
-import React from 'react';
-import {PingPongPlane} from 'react-curtains';
+```javascript
+import { PingPongPlane } from "vue-curtains";
 
-function BasicPingPongPlane() {
-    return (
-        <PingPongPlane />
-    );
+export default {
+  name: "BasicPingPongPlane",
+  components: {
+    PingPongPlane
+  }
 }
+</script>
+
+<template>
+  <PingPongPlane />
+</template>
 ```
 
 #### Properties & Events
 
 You can refer to both the <a href="https://www.curtainsjs.com/fxaa-pass-class.html">PingPongPlane curtains.js class</a> and [Plane component](plane.md) documentations.
 
-Compared to the `<Plane />` component the only additional prop you have to pass to your `<PingPongPlane />` component is the `sampler` name that you'll use in your shader (if not set, will use "uPingPongTexture").
+Compared to the `<Plane />` component the only additional parameter you have to pass to your `<PingPongPlane />` component is the `sampler` name that you'll use in your shader (if not set, will use "uPingPongTexture").
 
 #### Unmounting
 
