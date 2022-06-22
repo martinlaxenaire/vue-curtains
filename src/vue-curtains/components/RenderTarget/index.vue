@@ -8,6 +8,7 @@ import {
   onBeforeUnmount,
 } from "vue";
 import { params } from "./params";
+import { useCurtains } from "../../hooks";
 import { flattenDefaultParams } from "../../utils";
 import { RenderTarget } from "curtainsjs";
 
@@ -28,7 +29,7 @@ export default {
   setup(props, { emit, slots }) {
     const renderTarget = ref({});
 
-    const curtains = inject("curtains");
+    const curtains = useCurtains();
 
     const params = flattenDefaultParams(props.params);
 

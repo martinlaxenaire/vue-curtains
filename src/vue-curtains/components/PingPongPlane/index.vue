@@ -6,6 +6,7 @@
 
 <script>
 import { ref, inject, onMounted, onBeforeUnmount, watch } from "vue";
+import { useCurtains } from "../../hooks";
 import { flattenDefaultParams } from "../../utils";
 import { params } from "./params.js";
 import { PingPongPlane } from "curtainsjs";
@@ -31,7 +32,7 @@ export default {
     "before-remove",
   ],
   setup(props, { emit }) {
-    const curtains = inject("curtains");
+    const curtains = useCurtains();
     const planeEl = ref(null);
 
     let plane;

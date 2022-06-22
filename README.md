@@ -2,54 +2,19 @@
 
 vue-curtains is an attempt at converting <a href="https://github.com/martinlaxenaire/curtainsjs">curtains.js</a> WebGL classes into reusable Vue components.
 
-[![Version](https://img.shields.io/npm/v/react-curtains?style=flat&colorA=f5f5f5&colorB=f5f5f5)](https://npmjs.com/package/vue-curtains)
+[![Version](https://img.shields.io/npm/v/vue-curtains?style=flat&colorA=f5f5f5&colorB=f5f5f5)](https://npmjs.com/package/vue-curtains)
 [![Twitter](https://img.shields.io/twitter/follow/webdesign_ml?label=%40webdesign_ml&style=flat&colorA=f5f5f5&colorB=f5f5f5&logo=twitter&logoColor=000000)](https://twitter.com/webdesign_ml)
 
 ## Getting started
 
 ### Installation
 
+> :warning: vue-curtains requires Vue 3
+
 Of course you'll need to create a Vue app first. Then, just add vue-curtains into your project by installing the npm package:
 
 ```bash
 npm install vue-curtains
-```
-
-### Plugin
-
-#### Installation
-
-First you will need to install the `VueCurtains` plugin:
-
-```javascript
-import { createApp } from "vue";
-import App from "./App.vue";
-import VueCurtains from "vue-curtains";
-
-createApp(App).use(VueCurtains).mount("#app");
-```
-
-#### Options
-
-You can pass the usual [curtains class parameters](https://www.curtainsjs.com/curtains-class.html#curtains-init-params) as the plugin options.
-
-```javascript
-import { createApp } from "vue";
-import App from "./App.vue";
-import VueCurtains from "vue-curtains";
-
-const app = createApp(App);
-
-app.use(VueCurtains, {
-  // webgl context options example
-  antialias: false,
-  permultipliedAlpha: true,
-  // curtains options example
-  autoRender: false,
-  watchScroll: false,
-});
-
-app.mount("#app");
 ```
 
 ### Components
@@ -63,21 +28,30 @@ vue-curtains introduces a bunch of components based on curtains.js classes:
 - [PingPongPlane](ping-pong-plane.md)
 - [FXAAPass](fxaa-pass.md)
 
-### Plugin injection & Hook
+### Hooks
 
-Following Vue 3 Composition API, vue-curtains lets you inject your `curtains` instance everywhere and provides a useful additional hook.
+The library relies on the Vue 3 Composition API.
 
-##### inject curtains
+Inside your `<Curtains />` component, you'll have access to a couple useful custom hooks:
+
+
+##### useCurtains
 
 ```javascript
-import { inject } from "vue";
+const curtains = useCurtains();
+```
+
+This hook returns the curtains instance injected by the `<Curtains />` component, or `null` if the instance is undefined (for example if you try to use it outside your `<Curtains />` component).
+
+```javascript
+import { useCurtains } from "vue-curtains";
 
 export default {
   name: "MyComponent",
 
   setup() {
     // now you'll have access to your curtains instance
-    const curtains = inject("curtains");
+    const curtains = useCurtains();
   }
 }
 ```
@@ -88,7 +62,7 @@ export default {
 useCurtainsEvent(event, callback);
 ```
 
-This hook lets you subscribe to any of your <a href="https://www.curtainsjs.com/curtains-class.html#events">curtains instance events</a>, so you can use those events from any component in your app.
+This hook lets you subscribe to any of your <a href="https://www.curtainsjs.com/curtains-class.html#events">curtains instance events</a>, so you can use those events from any `<Curtains />` child component in your app.
 
 ```javascript
 import { useCurtainsEvent } from "vue-curtains";
@@ -197,11 +171,13 @@ export default {
 
 <template>
   <!-- should be put outside the router -->
-  <Curtains id="CurtainsCanvas" />
+  <Curtains id="CurtainsCanvas">
 
-  <Plane id="BasicPlane" :params="planeParams" @render="onRender">
-    <img src="/path/to/my-image.jpg" alt="" />
-  </Plane>
+    <Plane id="BasicPlane" :params="planeParams" @render="onRender">
+      <img src="/path/to/my-image.jpg" alt="" />
+    </Plane>
+  
+  </Curtains>
 </template>
 
 <style scoped>
@@ -231,7 +207,6 @@ export default {
 ```javascript
 import { createApp } from "vue";
 import App from "./App.vue";
-import VueCurtains from "vue-curtains";
 
-createApp(App).use(VueCurtains).mount("#app");
+createApp(App).mount("#app");
 ```

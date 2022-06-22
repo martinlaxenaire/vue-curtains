@@ -6,6 +6,7 @@
 
 <script>
 import { ref, inject, onMounted, onBeforeUnmount, watch, toRaw } from "vue";
+import { useCurtains } from "../../hooks";
 import { flattenDefaultParams } from "../../utils";
 import { params } from "./params.js";
 import { Plane } from "curtainsjs";
@@ -31,7 +32,7 @@ export default {
     "before-remove",
   ],
   setup(props, { emit }) {
-    const curtains = inject("curtains");
+    const curtains = useCurtains();
     const planeEl = ref(null);
 
     const renderTarget = inject("renderTarget", null);

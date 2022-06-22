@@ -4,7 +4,7 @@
 
 The `<Curtains></Curtains>` component is responsible for the creation of the WebGL context. It will act as a wrapper for the curtains.js <a href="https://www.curtainsjs.com/curtains-class.html">Curtains class</a>.
 
-For all those reasons, you should always wrap your application, including additional context providers and routing inside the `<Curtains></Curtains>` component.
+For all those reasons, you should always wrap your application, including routing inside the `<Curtains></Curtains>` component.
 
 #### Usage
 

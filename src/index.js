@@ -1,7 +1,3 @@
-import { default as VueCurtains } from "./vue-curtains/plugins/vue-curtains-plugin";
-
-export default VueCurtains;
-
 export { default as Curtains } from "./vue-curtains/components/Curtains/index.vue";
 export { default as Plane } from "./vue-curtains/components/Plane/index.vue";
 
@@ -11,4 +7,4 @@ export { default as ShaderPass } from "./vue-curtains/components/ShaderPass/inde
 export { default as PingPongPlane } from "./vue-curtains/components/PingPongPlane/index.vue";
 export { default as FXAAPass } from "./vue-curtains/components/FXAAPass/index.vue";
 
-export { useCurtainsEvent } from "./vue-curtains/hooks";
+export { useCurtains, useCurtainsEvent } from "./vue-curtains/hooks";
