@@ -8,9 +8,25 @@
     "build": "rollup -c",
     "prepare": "npm run build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "vue",
+    "webgl",
+    "curtains.js",
+    "curtainsjs"
+  ],
+  "author": {
+    "name": "Martin Laxenaire",
+    "email": "martin.laxenaire@gmail.com",
+    "url": "https://twitter.com/webdesign_ml"
+  },
+  "homepage": "https://github.com/martinlaxenaire/vue-curtains",
+  "bugs": {
+    "url": "https://github.com/martinlaxenaire/vue-curtains/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/martinlaxenaire/vue-curtains.git"
+  },
   "peerDependencies": {
     "vue": "^3.2.21"
   },
