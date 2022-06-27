@@ -1,12 +1,5 @@
 <script>
-import {
-  provide,
-  readonly,
-  ref,
-  inject,
-  onMounted,
-  onBeforeUnmount,
-} from "vue";
+import { provide, readonly, ref, onBeforeUnmount } from "vue";
 import { params } from "./params";
 import { useCurtains } from "../../hooks";
 import { flattenDefaultParams } from "../../utils";
@@ -29,8 +22,6 @@ export default {
   setup(props, { emit, slots }) {
     const renderTarget = ref({});
 
-    const curtains = useCurtains();
-
     const params = flattenDefaultParams(props.params);
 
     if (props.autoDetectChildren) {
@@ -40,7 +31,7 @@ export default {
       provide("uniqueKey", props.uniqueKey);
     }
 
-    onMounted(() => {
+    useCurtains((curtains) => {
       let existingRenderTarget = [];
       if (props.uniqueKey) {
         existingRenderTarget = curtains.renderTargets.filter(

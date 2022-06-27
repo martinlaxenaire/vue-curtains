@@ -38,7 +38,7 @@ Inside your `<Curtains></Curtains>` component, you'll have access to a couple us
 ##### useCurtains
 
 ```javascript
-const curtains = useCurtains();
+useCurtains(callback);
 ```
 
 This hook returns the curtains instance injected by the `<Curtains></Curtains>` component, or `null` if the instance is undefined (for example if you try to use it outside your `<Curtains></Curtains>` component).
@@ -50,8 +50,10 @@ export default {
   name: "MyComponent",
 
   setup() {
-    // now you'll have access to your curtains instance
-    const curtains = useCurtains();
+    useCurtains((curtains) => {
+      // get curtains bounding box for example...
+      const curtainsBBox = curtains.getBoundingRect();
+    });
   }
 }
 ```

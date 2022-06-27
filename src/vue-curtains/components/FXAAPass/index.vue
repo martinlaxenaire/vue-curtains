@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { inject, onMounted, onBeforeUnmount, watch } from "vue";
+import { onBeforeUnmount, watch } from "vue";
 import { useCurtains } from "../../hooks";
 import { flattenDefaultParams } from "../../utils";
 import { params } from "./params.js";
@@ -28,13 +28,11 @@ export default {
     "before-remove",
   ],
   setup(props, { emit }) {
-    const curtains = useCurtains();
-
     let fxaaPass;
 
     const params = flattenDefaultParams(props.params);
 
-    onMounted(() => {
+    useCurtains((curtains) => {
       emit("before-create");
 
       fxaaPass = new FXAAPass(curtains, params);

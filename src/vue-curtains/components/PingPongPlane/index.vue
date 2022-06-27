@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ref, inject, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, onBeforeUnmount, watch } from "vue";
 import { useCurtains } from "../../hooks";
 import { flattenDefaultParams } from "../../utils";
 import { params } from "./params.js";
@@ -32,14 +32,13 @@ export default {
     "before-remove",
   ],
   setup(props, { emit }) {
-    const curtains = useCurtains();
     const planeEl = ref(null);
 
     let plane;
 
     const params = flattenDefaultParams(props.params);
 
-    onMounted(() => {
+    useCurtains((curtains) => {
       emit("before-create");
 
       plane = new PingPongPlane(curtains, planeEl.value, params);

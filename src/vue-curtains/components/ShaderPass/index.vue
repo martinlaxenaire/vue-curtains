@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { inject, onMounted, onBeforeUnmount, watch, toRaw } from "vue";
+import { inject, onBeforeUnmount, watch, toRaw } from "vue";
 import { useCurtains } from "../../hooks";
 import { flattenDefaultParams } from "../../utils";
 import { params } from "./params.js";
@@ -29,14 +29,12 @@ export default {
     "before-remove",
   ],
   setup(props, { emit }) {
-    const curtains = useCurtains();
+    let curtains;
 
     const renderTarget = inject("renderTarget", null);
     const parentRTKey = inject("uniqueKey", null);
 
     const key = props.uniqueKey || parentRTKey;
-
-    let isMounted = false;
 
     const params = flattenDefaultParams(props.params);
 
@@ -56,42 +54,43 @@ export default {
       const rtReady = renderTarget
         ? renderTarget.value && renderTarget.value.renderer
         : true;
-      const readyToCreate = isMounted && rtReady;
 
-      let existingShaderPass = [];
-      if (key) {
-        existingShaderPass = curtains.shaderPasses.filter(
-          (pass) => pass._uniqueKey === key
-        );
-      }
-
-      if (existingShaderPass.length) {
-        shaderPass = existingShaderPass[0];
-      } else if (readyToCreate) {
-        emit("before-create");
-
-        if (renderTarget && renderTarget.value) {
-          params.renderTarget = toRaw(renderTarget.value);
-        }
-
-        shaderPass = new ShaderPass(curtains, params);
-
+      if (curtains) {
+        let existingShaderPass = [];
         if (key) {
-          shaderPass._uniqueKey = key;
+          existingShaderPass = curtains.shaderPasses.filter(
+            (pass) => pass._uniqueKey === key
+          );
         }
 
-        shaderPass
-          .onError(() => emit("error", shaderPass))
-          .onLoading((texture) => emit("loading", shaderPass, texture))
-          .onReady(() => emit("ready", shaderPass))
-          .onAfterResize(() => emit("after-resize", shaderPass))
-          .onRender(() => emit("render", shaderPass))
-          .onAfterRender(() => emit("after-render", shaderPass));
+        if (existingShaderPass.length) {
+          shaderPass = existingShaderPass[0];
+        } else if (rtReady) {
+          emit("before-create");
+
+          if (renderTarget && renderTarget.value) {
+            params.renderTarget = toRaw(renderTarget.value);
+          }
+
+          shaderPass = new ShaderPass(curtains, params);
+
+          if (key) {
+            shaderPass._uniqueKey = key;
+          }
+
+          shaderPass
+            .onError(() => emit("error", shaderPass))
+            .onLoading((texture) => emit("loading", shaderPass, texture))
+            .onReady(() => emit("ready", shaderPass))
+            .onAfterResize(() => emit("after-resize", shaderPass))
+            .onRender(() => emit("render", shaderPass))
+            .onAfterRender(() => emit("after-render", shaderPass));
+        }
       }
     };
 
-    onMounted(() => {
-      isMounted = true;
+    useCurtains((c) => {
+      curtains = c;
       createShaderPass();
     });
 

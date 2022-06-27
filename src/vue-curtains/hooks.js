@@ -1,14 +1,41 @@
-import { inject, onMounted, onBeforeUnmount } from "vue";
+import { inject, onMounted, onBeforeUnmount, watch, toRaw } from "vue";
 import { generateUUID } from "./utils";
 
-export function useCurtains() {
+let curtainsInstance;
+
+export function useCurtains(callback = () => {}) {
+  let isMounted = false;
   const curtains = inject("curtains", null);
-  return curtains || null;
+
+  const launchCallback = () => {
+    if (curtainsInstance && isMounted) {
+      callback(curtainsInstance);
+    }
+  };
+
+  onMounted(() => {
+    isMounted = true;
+    launchCallback();
+  });
+
+  if (curtainsInstance) {
+    launchCallback();
+  } else {
+    watch(
+      () => curtains.container,
+      async (container) => {
+        if (container) {
+          curtainsInstance = toRaw(curtains);
+          launchCallback();
+        }
+      },
+      { immediate: true }
+    );
+  }
 }
 
 export function useCurtainsEvent(event, callback = () => {}) {
-  //const vueCurtains = inject("vueCurtains");
-  const vueCurtains = inject("curtainsEvents");
+  const curtainsEvents = inject("curtainsEvents");
 
   const subscription = {
     event,
@@ -17,11 +44,11 @@ export function useCurtainsEvent(event, callback = () => {}) {
   };
 
   onMounted(() => {
-    vueCurtains.addSubscription(subscription);
+    curtainsEvents.addSubscription(subscription);
   });
 
   onBeforeUnmount(() => {
-    vueCurtains.removeSubscription(subscription);
+    curtainsEvents.removeSubscription(subscription);
   });
 
   return subscription;

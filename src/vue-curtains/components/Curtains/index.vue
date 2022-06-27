@@ -7,7 +7,15 @@
 import { Curtains } from "curtainsjs";
 import { curtainsEvents, flattenDefaultParams } from "../../utils";
 import { params } from "./params.js";
-import { ref, provide, onMounted, onBeforeUnmount } from "vue";
+import {
+  ref,
+  provide,
+  shallowReactive,
+  readonly,
+  onMounted,
+  onBeforeUnmount,
+  toRaw,
+} from "vue";
 
 export default {
   name: "Curtains",
@@ -32,8 +40,8 @@ export default {
 
     const params = flattenDefaultParams(props.params);
     // instanciate curtains right away
-    const curtains = new Curtains(params);
-    provide("curtains", curtains);
+    const curtains = shallowReactive(new Curtains(params));
+    provide("curtains", readonly(curtains));
 
     onMounted(() => {
       // set its container
@@ -42,9 +50,9 @@ export default {
       // loop through our subscriptions and bind them to curtains events
       Object.keys(curtainsEvents.subscriptions).forEach((subscription) => {
         curtains[subscription](() => {
-          emit(curtainsEvents.kebabCase[subscription], curtains);
+          emit(curtainsEvents.kebabCase[subscription], toRaw(curtains));
           curtainsEvents.subscriptions[subscription].forEach((element) => {
-            element.callback && element.callback(curtains);
+            element.callback && element.callback(toRaw(curtains));
           });
         });
       });
