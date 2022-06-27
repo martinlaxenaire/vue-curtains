@@ -1,6 +1,6 @@
 {
   "name": "vue-curtains",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "vue-curtains is an attempt at converting curtains.js WebGL classes into reusable Vue components.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

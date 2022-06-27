@@ -1,6 +1,6 @@
 <h1>vue-curtains</h1>
 
-vue-curtains is an attempt at converting <a href="https://github.com/martinlaxenaire/curtainsjs">curtains.js</a> WebGL classes into reusable Vue components.
+vue-curtains is an attempt at converting [curtains.js](https://github.com/martinlaxenaire/curtainsjs) WebGL classes into reusable Vue components.
 
 [![Version](https://img.shields.io/npm/v/vue-curtains?style=flat&colorA=f5f5f5&colorB=f5f5f5)](https://npmjs.com/package/vue-curtains)
 [![Twitter](https://img.shields.io/twitter/follow/webdesign_ml?label=%40webdesign_ml&style=flat&colorA=f5f5f5&colorB=f5f5f5&logo=twitter&logoColor=000000)](https://twitter.com/webdesign_ml)
@@ -64,7 +64,7 @@ export default {
 useCurtainsEvent(event, callback);
 ```
 
-This hook lets you subscribe to any of your <a href="https://www.curtainsjs.com/curtains-class.html#events">curtains instance events</a>, so you can use those events from any `<Curtains></Curtains>` child component in your app.
+This hook lets you subscribe to any of your [curtains instance events](https://www.curtainsjs.com/curtains-class.html#events), so you can use those events from any `<Curtains></Curtains>` child component in your app.
 
 ```javascript
 import { useCurtainsEvent } from "vue-curtains";
@@ -87,11 +87,19 @@ export default {
 
 Here are codesandboxes ports of some of the official documentation examples:
 
-TODO
+- [Basic plane](https://codesandbox.io/s/vue-curtains-basic-plane-dpbosi)
+- [Vertex coordinates helper](https://codesandbox.io/s/vue-curtains-vertex-coordinates-helper-ql8suw)
+- [Simple plane](https://codesandbox.io/s/vue-curtains-simple-plane-l7mn1j)
+- [Simple video plane](https://codesandbox.io/s/vue-curtains-simple-video-plane-1n2sch)
+- [Slideshow using GSAP](https://codesandbox.io/s/vue-curtains-slideshow-vvt2ox)
+- [Multiple planes](https://codesandbox.io/s/vue-curtains-multiple-planes-k7zwx6)
+- [Multiple planes with post processing](https://codesandbox.io/s/vue-curtains-multiple-planes-post-processed-29w3qj)
+- [Selective render targets](https://codesandbox.io/s/vue-curtains-selective-render-targets-9zo60h)
+- [Flowmap](https://codesandbox.io/s/vue-curtains-flowmap-oi5u7l)
 
 #### Basic example
 
-This is the port of <a href="https://www.curtainsjs.com/examples/basic-plane/index.html">curtains.js documentation basic example</a>:
+This is the port of [curtains.js documentation basic example](https://www.curtainsjs.com/examples/basic-plane/index.html):
 
 ##### App.vue
 
